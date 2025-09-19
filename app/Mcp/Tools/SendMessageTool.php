@@ -13,6 +13,19 @@ use Laravel\Mcp\Server\Tool;
 final class SendMessageTool extends Tool
 {
     /**
+     * The names that should not be used when sending a message.
+     */
+    private const array IGNORABLE_NAMES = [
+        'user',
+        'assistant',
+        'claude',
+        'gpt',
+        'ai',
+        'bot',
+        'cursor',
+    ];
+
+    /**
      * The tool's description.
      */
     protected string $description = <<<'MARKDOWN'
@@ -31,6 +44,14 @@ final class SendMessageTool extends Tool
 
         $name = $request->string('name')->value();
         $body = $request->string('body')->value();
+
+        if (in_array(mb_strtolower($name), self::IGNORABLE_NAMES)) {
+            return Response::error(<<<'MARKDOWN'
+                You must provide a valid name that is not "User", "Assistant", "Claude", "GPT", "AI", "Bot", or "Cursor".
+
+                IMPORTANT: Ask the user for their first name if you don't know it.
+                MARKDOWN);
+        }
 
         $action->handle($name, $body);
 
@@ -58,7 +79,7 @@ final class SendMessageTool extends Tool
                 ->description(<<<'MARKDOWN'
                     The name of the user sending the message.
 
-                    Don't use "User", or "Assistant", or "Claude", or "GPT", or "AI", or "Bot".
+                    Don't use "User", "Assistant", "Claude", "GPT", "AI", "Bot", or "Cursor".
 
                     IMPORTANT: Ask the user for their first name if you don't know it.
                     MARKDOWN),
