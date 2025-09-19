@@ -21,7 +21,7 @@ final class MessageFactory extends Factory
     {
         return [
             'name' => fake()->name(),
-            'content' => fake()->text(200),
+            'body' => fake()->text(200),
         ];
     }
 
