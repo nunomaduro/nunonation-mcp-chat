@@ -11,7 +11,7 @@ test('to array', function () {
         ->toBe([
             'id',
             'name',
-            'content',
+            'body',
             'created_at',
             'updated_at',
         ]);
