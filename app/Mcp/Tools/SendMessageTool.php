@@ -20,6 +20,19 @@ final class SendMessageTool extends Tool
         MARKDOWN;
 
     /**
+     * The names that should not be used when sending a message.
+     */
+    private array $ignoreableNames = [
+        'User',
+        'Assistant',
+        'Claude',
+        'GPT',
+        'AI',
+        'Bot',
+        'Cursor',
+    ];
+
+    /**
      * Handle the tool request.
      */
     public function handle(Request $request, CreateMessageAction $action): Response
@@ -31,6 +44,16 @@ final class SendMessageTool extends Tool
 
         $name = $request->string('name')->value();
         $body = $request->string('body')->value();
+
+        foreach ($this->ignoreableNames as $ignoreableName) {
+            if (strtolower($name) === strtolower($ignoreableName)) {
+                return Response::error(<<<'MARKDOWN'
+                    You must provide a valid name that is not "User", or "Assistant", or "Claude", or "GPT", or "AI", or "Bot".
+
+                    IMPORTANT: Ask the user for their first name if you don't know it.
+                    MARKDOWN);
+            }
+        }
 
         $action->handle($name, $body);
 

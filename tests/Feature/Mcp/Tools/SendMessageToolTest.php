@@ -39,3 +39,14 @@ it('sends a message', function () {
         ->and($message->name)->toBe('Marc')
         ->and($message->body)->toBe('Hello, world!');
 });
+
+it('rejects invalid names', function () {
+    $response = NunoNationChat::tool(SendMessageTool::class, [
+        'name' => 'User',
+        'body' => 'Hello, world!',
+    ]);
+
+    $response->assertHasErrors([
+        'You must provide a valid name',
+    ]);
+});
