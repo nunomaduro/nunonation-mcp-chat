@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Mcp\Servers;
 
+use App\Mcp\Tools\GetMessagesTool;
 use App\Mcp\Tools\SendMessageTool;
 use Laravel\Mcp\Server;
 
@@ -39,6 +40,7 @@ final class NunoNationChat extends Server
      */
     protected array $tools = [
         SendMessageTool::class,
+        GetMessagesTool::class,
     ];
 
     /**
